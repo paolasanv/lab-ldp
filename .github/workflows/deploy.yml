@@ -1,0 +1,46 @@
+name: Deploy MkDocs
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v6
+
+      - name: Instalar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+
+      - name: Instalar MkDocs
+        run: pip install mkdocs
+
+      - name: Construir sitio
+        run: mkdocs build
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir sitio
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site/
+
+      - name: Publicar sitio
+        id: deployment
+        uses: actions/deploy-pages@v4

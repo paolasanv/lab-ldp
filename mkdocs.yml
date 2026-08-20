@@ -1,0 +1,18 @@
+site_name: Notas de laboratorio
+
+nav:
+  - Inicio: index.md
+
+  - Práctica 01:
+      - Introducción a Haskell: lab01/haskell.md
+      - Retos: lab01/retos.md
+      - Ejecución de Pruebas: lab01/pruebas.md
+
+  - Práctica 02:
+      - Retos: lab02/retos.md
+      - Ejecución de Pruebas: lab02/pruebas.md
+
+  - Práctica 03: 
+      - Retos: lab03/retos.md
+      - Ejecución de Pruebas: lab03/pruebas.md
+      - Uso de MiniLisp++: lab03/minilisp.md
