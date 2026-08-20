@@ -27,8 +27,8 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Instalar MkDocs
-        run: pip install mkdocs
+      - name: Instalar MkDocs y extensiones
+        run: pip install mkdocs pymdown-extensions
 
       - name: Construir sitio
         run: mkdocs build
