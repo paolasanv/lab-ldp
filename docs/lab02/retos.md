@@ -68,7 +68,7 @@ Después definimos las reglas de producción para el Árbol de Sintaxis Abstract
 ASA : nat                  { Num $1 }
     | bool                 { Boolean $1 }   
     | ...
-    | nil 				         { Nil }
+    | nil                  { Nil }
     | '(' "list" lista ')' { List $3 } 
 ```
 
@@ -83,7 +83,7 @@ data ASA
   = Num Int
   | Boolean Bool
   | ...
-  | Nil 		    -- Nuevo 
+  | Nil         -- Nuevo 
   | List [ASA]  -- Nuevo
 ```
 
@@ -100,11 +100,11 @@ El no terminal *lista* representa una secuencia no vacía de expresiones (1 o m�
 ASA : nat                  { Num $1 }
     | bool                 { Boolean $1 }   
     | ...
-    | nil 				         { Nil }
+    | nil                  { Nil }
     | '(' "list" lista ')' { List $3}
 
-lista :  ASA	             {[$1]}
-	| ASA lista              {$1 : $2}
+lista :  ASA                {[$1]}
+	| ASA lista             {$1 : $2}
 ```
 
 *Hint: Propón una nueva definición, similar a *lista*,  para representar una secuencia de ASAs con al menos dos elementos.* 

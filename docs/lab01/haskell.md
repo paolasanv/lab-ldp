@@ -85,7 +85,7 @@ ghci> dosVeces negativo (6 - (7 ^ 2))
 
 En este último caso, primero calculamos `6 - (7 ^ 2)`, que da `-43`. Después `dosVeces` aplica `negativo` dos veces:
 
-```text
+```haskell
 negativo (-43) = 43
 negativo 43    = -43
 ```
@@ -99,7 +99,7 @@ Una característica importante de Haskell es que **las funciones también pueden
 
 Los operadores aritméticos suelen escribirse entre sus operandos, es decir, en **notación infija**:
 
-```text
+```haskell
 (+)  Suma
 (-)  Resta
 (*)  Multiplicación
@@ -109,13 +109,13 @@ Los operadores aritméticos suelen escribirse entre sus operandos, es decir, en 
 
 También podemos utilizar funciones matemáticas como:
 
-```text
+```haskell
 sqrt  Raíz cuadrada
 ```
 
 Para trabajar con valores booleanos tenemos:
 
-```text
+```haskell
 True   Verdadero
 False  Falso
 

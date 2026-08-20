@@ -30,7 +30,7 @@ ghci> main
 
 Una vez que el intérprete se encuentre en ejecución, se mostrará el prompt de **MiniLisp++**, donde es posible introducir expresiones para evaluarlas. Por ejemplo:
 
-```text
+```haskell
 MiniLisp++> (+ 4 (- 0 1))
 Num 4
 ```
