@@ -1,17 +1,41 @@
-# Welcome to MkDocs
+# ¡Bienvenida/o/e a las notas del laboratorio de Lenguajes de Programación!
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Estas notas son un material de apoyo para resolver las prácticas semanales del curso. Aquí encontrarás explicaciones, ejemplos y algunas recomendaciones que te ayudarán a comprender los conceptos necesarios para completar el código de cada práctica.
 
-## Commands
+Sin embargo, **estas notas no sustituyen las instrucciones de la práctica ni las notas de clase**. Antes de comenzar cada práctica, asegúrate de haber revisado el material correspondiente a la semana.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+Para cada práctica, consulta:
 
-## Project layout
+* 📖 **Notas de clase:** los conceptos teóricos necesarios.
+* 📝 **Documento de la práctica:** los problemas y requisitos que debes resolver, además de la rúbrica de evaluación para la defensa.
+* 💻 **Estas notas:** explicaciones y ejemplos que pueden ayudarte durante la implementación.
+---
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## Práctica 01: Introducción a Haskell
+
+Comenzarás a trabajar con **Haskell**, familiarizándote con sus principales elementos y con la forma de expresar soluciones utilizando programación funcional.
+
+---
+
+## Práctica 02: Describiendo un lenguaje
+
+Construirás las primeras piezas de un lenguaje de programación. Aprenderás a definir un **analizador léxico y sintáctico** utilizando **Alex y Happy**, herramientas del ecosistema de Haskell.
+
+Durante la implementación será importante comprender qué responsabilidad tiene cada componente y cómo se relacionan entre sí.
+
+---
+
+## Práctica 03: Semántica de paso grande por sustitución
+
+En esta práctica integrarás una **semántica de paso grande por sustitución** para evaluar expresiones de **MiniLisp++**.
+
+El objetivo no será únicamente implementar las reglas de evaluación, sino también comprender cómo dichas reglas se traducen en código y cómo el evaluador determina el resultado de una expresión.
+
+---
+
+## Práctica 04: Alcance estático mediante cerraduras
+
+En esta práctica trabajarás con una versión reducida de **MiniLisp++** para incorporar **funciones y aplicaciones de funciones**, integrándolas con el flujo de trabajo desarrollado en las prácticas anteriores.
+
+Un aspecto central será comprender cómo el **alcance estático** se representa mediante **cerraduras** y cómo estas permiten conservar el entorno necesario para evaluar una función posteriormente.
+

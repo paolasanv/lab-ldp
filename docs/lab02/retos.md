@@ -1,7 +1,8 @@
-# Laboratorio 02: Describiendo un lenguaje
+# Laboratorio 02
 
-## Reto 1: Lexer.x (analizador léxico)
-Añade las reglas léxicas correspondientes para reconocer los nuevos tokens solicitados (and, or, \*, /, expt, <, >, <=, >=, eq, add1, sub1, zero?).
+## Reto 1 — Analizador léxico
+### Lexer.x
+Añade las reglas léxicas correspondientes para reconocer los nuevos lexemas solicitados (and, or, \*, /, expt, <, >, <=, >=, eq, add1, sub1, zero?).
 
 Ejemplo: 
 
@@ -38,7 +39,8 @@ data Token
   | TokenList 	-- Nuevo
 ```
 
-## Reto 2: Grammars.y (definición de la gramática)
+## Reto 2 — Gramática
+### Grammars.y 
 Integra las reglas de producción (unarias, binarias y n-arias) en el no terminal principal ASA, respetando la notación prefija y el agrupamiento por paréntesis para MiniLisp.
 
 *Nota: Si una regla requiere  operaciones multiparamétricas, utiliza un símbolo no terminal auxiliar que definirás formalmente en el Reto 3.*
@@ -72,7 +74,7 @@ ASA : nat                  { Num $1 }
 
 A la izquierda se define la estructura sintáctica esperada en el código fuente (MiniLisp).
 
-A la derecha se define el código de Haskell que permite construir el nodo correspondiente del ASA. Los identificadores posicionales ($n) extraen el valor semántico del n-ésimo símbolo de la regla de producción. Es decir, en la regla de *"list"*, el constructor *List* recibe como parámetro la subexpresión en la tercera posición ($3), que debe corresponder a un grupo de ASAs.
+A la derecha se define el código de Haskell que permite construir el nodo correspondiente del ASA. Los identificadores posicionales (\$n) extraen el valor semántico del n-ésimo símbolo de la regla de producción. Es decir, en la regla de *"list"*, el constructor *List* recibe como parámetro la subexpresión en la tercera posición ($3), que debe corresponder a un grupo de ASAs.
 
 El ASA también debe definirse en el bloque Haskell de Grammars.y:
 
@@ -85,7 +87,8 @@ data ASA
   | List [ASA]  -- Nuevo
 ```
 
-## Reto 3: Grammars.y (sintaxis abstracta)
+## Reto 3 — Sintaxis abstracta
+### Grammars.y 
 
 Define formalmente los no terminales auxiliares utilizados en el Reto 2, empleando reglas recursivas para representar secuencias de dos o más argumentos.
 

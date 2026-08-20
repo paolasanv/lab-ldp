@@ -1,20 +1,21 @@
 # Laboratorio 03: Semántica de paso grande por sustitución
 
-## Reto 1 y 2: Completar el analizador léxico (`Lexer.x`) y el analizador sintáctico (`Grammars.y`)
+La solución a los primeros dos ejercicios es análoga a la implementada en la práctica 2.
 
-La solución de estos ejercicios es análoga a la implementada en la práctica anterior.
-
-### Reto 1: Reconocimiento de `let` y `let*`
+## Reto 1 — Completar el lexer
+### Lexer.x
 
 Modifica el analizador léxico para reconocer `let` y `let*` como **palabras reservadas** y no como identificadores.
 
-### Reto 2: Reglas de producción para `let` y `let*`
+## Reto 2 — Completar el analizador sintáctico
+### Grammars.y
 
-Añade las reglas de producción correspondientes a las expresiones `let` y `let*` en el analizador sintáctico.
+Incorpora las reglas de producción para las expresiones `let` y `let*`, junto con la regla correspondiente a los identificadores y los símbolos no terminales  `Binding` y `Bindings`.
 
 ---
 
-## Reto 3: Completar la sustitución (`Interp.hs`)
+## Reto 3 — Implementar la sustitución 
+### Interp.hs
 
 Completa las funciones auxiliares necesarias para implementar la **sustitución nominal sin captura**.
 
@@ -54,26 +55,20 @@ Sin embargo, si la misma variable aparece nuevamente como ligador dentro de la l
 
 Por ejemplo:
 
-```text
+```haskell
 (let* ((x 2) (x 1) (y 4) (z (+ y x))) z)
 ```
 
 se reduce mediante la siguiente secuencia:
 
-```text
+```haskell
 (let* ((x 1) (y 4) (z (+ y x))) z)
-```
 
-```text
-(let* ((y 4) (z (+ y 1))) z)
-```
+=> (let* ((y 4) (z (+ y 1))) z)
 
-```text
-(let* ((z (+ 4 1))) z)
-```
+=> (let* ((z (+ 4 1))) z)
 
-```text
-5
+=> 5
 ```
 
 Observa que el segundo ligador de `x` oculta al primero, por lo que el valor `2` no se utiliza en los *bindings* posteriores.
@@ -102,16 +97,16 @@ La sustitución debe respetar el alcance de las variables y realizar un **renomb
 
 Esta función representa una secuencia dependiente de sustituciones y será utilizada como auxiliar para definir la semántica de paso grande de `let*`.
 
-**Observación**
-
-Las reglas de sustitución para `let` y `let*` son similares; la diferencia principal se encuentra en el alcance que debe renombrarse cuando existe riesgo de captura.
-
-Considera lo siguiente:
-
-| Constructor | Condición |
-| :---: | :--- |
-| `let` | se renombra el cuerpo |
-| `let*` | se renombrarán los bindings posteriores y el cuerpo |
+> **⚠️ OBSERVACIÓN IMPORTANTE**
+>
+>Las reglas de sustitución para `let` y `let*` son similares; la diferencia principal se encuentra en el alcance que debe renombrarse cuando existe riesgo de captura.
+>
+>Considera lo siguiente:
+>
+>| Constructor | Condición |
+>| :---: | :--- |
+>| `let` | se renombra el cuerpo |
+>| `let*` | se renombrarán los bindings posteriores y el cuerpo |
 
 ---
 
@@ -141,7 +136,7 @@ $$
 
 debe aplicarse también al *binding* de `y`, por lo que la expresión se reduce a:
 
-```text
+```haskell
 (let ((x 6))
   (let ((y (+ 6 5)))
     y))
@@ -149,7 +144,7 @@ debe aplicarse también al *binding* de `y`, por lo que la expresión se reduce 
 
 En cambio, considera:
 
-```text
+```haskell
 (let ((x 6)
       (y (+ x 5)))
   y)
@@ -161,17 +156,20 @@ Observa que esta distinción aplica a `let` y **no a `let*`**, ya que en `let*` 
 
 ---
 
-## Reto 4: Completar la evaluación con semántica de paso grande (`Interp.hs`)
+## Reto 4 — Completar la evaluación con semántica de paso grande 
+### Interp.hs
 
 Implementa la semántica operacional de **paso grande** para todos los constructores de `MiniLisp++`, utilizando las reglas de evaluación definidas en el documento de la práctica.
 
 Lee con atención las **precondiciones** que deben cumplirse en cada regla de evaluación.
 
-**Importante:** no es válido traducir `let*` a `let` para implementar su evaluación. La semántica de `let*` debe implementarse de acuerdo con las reglas de evaluación establecidas para este constructor.
-
-Para la implementación puedes utilizar:
-
-* funciones de orden superior;
-* listas de comprensión;
-* funciones auxiliares propias;
-* las funciones de sustitución definidas en el Reto 3 (este punto en realidad es obligatorio).
+> **⚠️ OBSERVACIÓN IMPORTANTE**
+>
+>NO es válido traducir `let*` a `let` para implementar su evaluación. La semántica de `let*` debe implementarse de acuerdo con las reglas de evaluación establecidas para este constructor.
+>
+>Para la implementación puedes utilizar:
+>
+>* funciones de orden superior;
+>* listas de comprensión;
+>* funciones auxiliares propias;
+>* las funciones de sustitución definidas en el Reto 3 (este punto en realidad es obligatorio).

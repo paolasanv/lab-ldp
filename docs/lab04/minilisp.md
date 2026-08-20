@@ -6,7 +6,7 @@ Para ejecutar el intérprete de **MiniLisp++**, asegúrate de haber generado el 
 runghc --ghc-arg='-package array' --ghc-arg='-package haskeline' MiniLispPlusPlus.hs
 ```
 
-### Alternativas
+## Alternativas 
 
 **Con `runhaskell`:**
 

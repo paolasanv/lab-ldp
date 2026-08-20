@@ -1,6 +1,6 @@
-# Ejecución de pruebas
+# Tests
 
-Para ejecutar las pruebas de la pŕactica, primero genera el analizador léxico y el analizador sintáctico con `alex` y `happy`:
+Para ejecutar las pruebas de la pŕactica 2, primero genera el analizador léxico y el analizador sintáctico con `alex` y `happy`:
 
 ```bash
 alex Lexer.x
@@ -13,7 +13,7 @@ A continuación, ejecuta el archivo de pruebas:
 runghc --ghc-arg='-package array' TestLaboratorio02.hs
 ```
 
-## Alternativas para ejecutar las pruebas
+## Alternativas 
 
 También es posible utilizar cualquiera de las siguientes alternativas:
 

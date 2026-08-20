@@ -10,30 +10,30 @@ happy Grammars.y
 A continuación, ejecuta el archivo de pruebas:
 
 ```bash
-runghc --ghc-arg='-package array' --ghc-arg='-package haskeline'  TestLaboratorio03.hs
+runghc --ghc-arg='-package array' --ghc-arg='-package haskeline'  TestLaboratorio04.hs
 ```
 
-### Alternativas 
+## Alternativas 
 
 También es posible utilizar cualquiera de las siguientes alternativas:
 
 **Con `runhaskell`:**
 
 ```bash
-runhaskell --ghc-arg='-package array' --ghc-arg='-package haskeline'  TestLaboratorio03.hs
+runhaskell --ghc-arg='-package array' --ghc-arg='-package haskeline'  TestLaboratorio04.hs
 ```
 
 **Compilando el programa con `ghc`:**
 
 ```bash
-ghc -package array -package haskeline TestLaboratorio03.hs -o tests
+ghc -package array -package haskeline TestLaboratorio04.hs -o tests
 ./tests
 ```
 
 **Utilizando `ghci`:**
 
 ```bash
-ghci -package array -package haskeline TestLaboratorio03.hs
+ghci -package array -package haskeline TestLaboratorio04.hs
 ```
 
 Una vez dentro de `ghci`, ejecuta la función principal:

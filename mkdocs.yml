@@ -1,18 +1,33 @@
-site_name: Notas de laboratorio
+site_name: Notas del laboratorio
+site_description: Lenguajes de Programación 2027-1
+
+theme: 
+  name: readthedocs
+
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
   - Inicio: index.md
-
   - Práctica 01:
-      - Introducción a Haskell: lab01/haskell.md
-      - Retos: lab01/retos.md
-      - Ejecución de Pruebas: lab01/pruebas.md
-
+    - Introducción a Haskell: lab01/haskell.md
+    - Retos de la semana: lab01/retos.md 
+    - Ejecución de pruebas: lab01/pruebas.md 
   - Práctica 02:
-      - Retos: lab02/retos.md
-      - Ejecución de Pruebas: lab02/pruebas.md
-
-  - Práctica 03: 
-      - Retos: lab03/retos.md
-      - Ejecución de Pruebas: lab03/pruebas.md
-      - Uso de MiniLisp++: lab03/minilisp.md
+    - Retos de la semana: lab02/retos.md 
+    - Ejecución de pruebas: lab02/pruebas.md
+  #- Práctica 03:
+  #  - Retos de la semana: lab03/retos.md 
+  #  - Intérprete de MiniLisp++: lab03/minilisp.md
+  #  - Ejecución de pruebas: lab03/pruebas.md
+  #- Práctica 04:
+  #  - Retos de la semana: lab04/retos.md 
+  #  - Intérprete de MiniLisp++: lab04/minilisp.md
+  #  - Ejecución de pruebas: lab04/pruebas.md
