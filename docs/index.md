@@ -23,6 +23,8 @@ Construirás las primeras piezas de un lenguaje de programación. Aprenderás a 
 
 Durante la implementación será importante comprender qué responsabilidad tiene cada componente y cómo se relacionan entre sí.
 
+_Requisito previo:_ comprensión de los contenidos abordados en la **cuarta** y **quinta** notas de clase. 
+
 ---
 
 ## Práctica 03: Semántica de paso grande por sustitución
@@ -30,6 +32,8 @@ Durante la implementación será importante comprender qué responsabilidad tien
 En esta práctica integrarás una **semántica de paso grande por sustitución** para evaluar expresiones de **MiniLisp++**.
 
 El objetivo no será únicamente implementar las reglas de evaluación, sino también comprender cómo dichas reglas se traducen en código y cómo el evaluador determina el resultado de una expresión.
+
+_Requisito previo:_  comprensión de los contenidos abordados en la **sexta** y **octava** notas de clase. 
 
 ---
 
@@ -39,3 +43,5 @@ En esta práctica trabajarás con una versión reducida de **MiniLisp++** para i
 
 Un aspecto central será comprender cómo el **alcance estático** se representa mediante **cerraduras** y cómo estas permiten conservar el entorno necesario para evaluar una función posteriormente.
 
+
+_Requisito previo:_  comprensión de los contenidos abordados en la **décima** nota de clase. 

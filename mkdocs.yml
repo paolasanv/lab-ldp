@@ -21,6 +21,7 @@ nav:
     - Retos de la semana: lab01/retos.md 
     - Ejecución de pruebas: lab01/pruebas.md 
   - Práctica 02:
+    - Análisis léxico y sintáctico: lab02/intro.md
     - Retos de la semana: lab02/retos.md 
     - Ejecución de pruebas: lab02/pruebas.md
   #- Práctica 03:

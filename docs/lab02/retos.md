@@ -43,13 +43,13 @@ data Token
 ### Grammars.y 
 Integra las reglas de producción (unarias, binarias y n-arias) en el no terminal principal ASA, respetando la notación prefija y el agrupamiento por paréntesis para MiniLisp.
 
-*Nota: Si una regla requiere  operaciones multiparamétricas, utiliza un símbolo no terminal auxiliar que definirás formalmente en el Reto 3.*
+**Si una regla requiere  operaciones multiparamétricas, utiliza un símbolo no terminal auxiliar que definirás formalmente en el Reto 3.**
 
 Ejemplo:
 
 Al añadir tokens dentro del analizador léxico (Lexer.x) también hay que definidos en el analizador sintáctico o parser (Grammars.y). 
 
-Nota: Este paso **no es necesario** para el reto #2.
+Este paso **no es necesario** para el **Reto 2**.
 
 ```haskell
 %token 
