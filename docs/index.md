@@ -44,4 +44,4 @@ En esta práctica trabajarás con una versión reducida de **MiniLisp++** para i
 Un aspecto central será comprender cómo el **alcance estático** se representa mediante **cerraduras** y cómo estas permiten conservar el entorno necesario para evaluar una función posteriormente.
 
 
-_Requisito previo:_  comprensión de los contenidos abordados en la **décima** nota de clase. 
+_Requisito previo:_  comprensión de los contenidos abordados en la **décima**, **decimoprimera** y **decimosegunda** notas de clase. 
