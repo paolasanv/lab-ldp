@@ -7,6 +7,8 @@ La solución a los primeros dos ejercicios es análoga a la implementada en la p
 
 Modifica el analizador léxico para reconocer `let` y `let*` como **palabras reservadas** y no como identificadores.
 
+---
+
 ## Reto 2 — Completar el analizador sintáctico
 ### Grammars.y
 
@@ -62,7 +64,9 @@ Por ejemplo:
 se reduce mediante la siguiente secuencia:
 
 ```haskell
-(let* ((x 1) (y 4) (z (+ y x))) z)
+(let* ((x 2) (x 1) (y 4) (z (+ y x))) z)
+
+=> (let* ((x 1) (y 4) (z (+ y x))) z)
 
 => (let* ((y 4) (z (+ y 1))) z)
 
@@ -99,7 +103,7 @@ Esta función representa una secuencia dependiente de sustituciones y será util
 
 > **⚠️ OBSERVACIÓN IMPORTANTE**
 >
->Las reglas de sustitución para `let` y `let*` son similares; la diferencia principal se encuentra en el alcance que debe renombrarse cuando existe riesgo de captura.
+>Las reglas de sustitución para `let` y `let*` son similares; la diferencia principal se encuentra en el alcance que debe renombrarse cuando **existe riesgo de captura**.
 >
 >Considera lo siguiente:
 >
@@ -134,7 +138,7 @@ $$
 [x := 6]
 $$
 
-debe aplicarse también al *binding* de `y`, por lo que la expresión se reduce a:
+debe aplicarse también al *binding* de `y`, por lo que la sustitución aplicada resulta en:
 
 ```haskell
 (let ((x 6))
@@ -153,6 +157,9 @@ En cambio, considera:
 En este caso, la expresión debe producir un error, ya que los *bindings* de `let` se evalúan de manera simultánea. Por lo tanto, `x` no está disponible para evaluar la expresión asociada a `y`.
 
 Observa que esta distinción aplica a `let` y **no a `let*`**, ya que en `let*` cada *binding* puede utilizar las variables ligadas por los *bindings* anteriores.
+
+
+> **Extra:** Si tienes dudas sobre el resultado de evaluar una expresión `let` o `let*`, puedes utilizar como referencia el [compilador en línea de Racket](https://onecompiler.com/racket) para ejecutar las expresiones y verificar su resultado.
 
 ---
 
