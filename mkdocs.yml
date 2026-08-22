@@ -1,8 +1,10 @@
-site_name: Notas del laboratorio
-site_description: Lenguajes de Programación 2027-1
+site_name: MiniLisp++
+site_description: Notas del laboratorio de Lenguajes de Programación 2027-1
+site_author: Leslie SanV
 
 theme: 
   name: readthedocs
+  language: es
 
 
 markdown_extensions:
@@ -34,3 +36,7 @@ nav:
 #    - Retos de la semana: lab04/retos.md 
 #    - Intérprete de MiniLisp++: lab04/minilisp.md
 #    - Ejecución de pruebas: lab04/pruebas.md
+#  - Práctica 05:
+#    - Estrategias de evaluación y recursión: lab05/intro.md
+#    - Retos de la semana: lab05/retos.md 
+#    - Ejecución de pruebas: lab05/pruebas.md
