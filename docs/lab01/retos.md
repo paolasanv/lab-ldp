@@ -10,6 +10,7 @@ $$
 d = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}
 $$
 
+---
 
 ## Reto 2 — Funciones predfinidas
 
@@ -27,9 +28,13 @@ debe producir:
 20
 ```
 
+---
+
 ## Reto 3 — Definición de funciones
 
 Utiliza funciones como argumentos para definir una función que permita aplicar otra función tres veces sobre un valor.
+
+---
 
 ## Reto 4 — Expresiones **let** y **where**
 
@@ -38,6 +43,8 @@ Utiliza `let` o `where` para definir una función que calcule la varianza de un 
 $$
 \sigma^2 = \frac{\sum_{i=1}^{N}(x_i-\mu)^2}{N}
 $$
+
+---
 
 ## Reto 5 — Condicional if y guardias 
 
@@ -50,6 +57,8 @@ Considera las siguientes categorías:
 * **templado:** temperatura a lo más de `25 °C`.
 * **calido:** temperatura que no sobrepasa los `35 °C`.
 * **calor extremo:** temperatura mayor a `36 °C`.
+
+---
 
 ## Reto 6 — Recursión en listas
 
@@ -66,6 +75,8 @@ debe producir:
 ```haskell
 ["hola", " ", "mundo", " ", ":)"]
 ```
+
+---
 
 ## Reto 7 — Definición de tipos
 
