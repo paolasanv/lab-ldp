@@ -17,6 +17,7 @@ Considera las siguientes restricciones:
 * Los parámetros de una función deben contener **al menos una variable**.
 * Los argumentos de una aplicación de función deben contener **al menos una expresión**.
 
+---
 
 ## Reto 3 — Currificar y desazucarar 
 ### Desugar.hs
