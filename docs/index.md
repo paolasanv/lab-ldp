@@ -63,4 +63,10 @@ La práctica abarcará las distintas etapas del intérprete: análisis léxico, 
 _Requisito previo:_  comprensión de los contenidos abordados en la **decimotercera** y  **decimocuarta** notas de clase. 
 --- 
 
+## Práctica 06: CPS y recursión de cola
+
+
+
+_Requisito previo:_  comprensión de los contenidos abordados en la **decimosexta** nota de clase. 
+
 --->
