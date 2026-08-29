@@ -65,7 +65,7 @@ _Requisito previo:_  comprensión de los contenidos abordados en la **decimoterc
 
 ## Práctica 06: CPS y recursión de cola
 
-
+Definirás funciones utilizando el estilo de paso de continuaciones (*CPS*), representando explícitamente mediante continuaciones las operaciones que deben realizarse después de cada llamada recursiva.
 
 _Requisito previo:_  comprensión de los contenidos abordados en la **decimosexta** nota de clase. 
 
