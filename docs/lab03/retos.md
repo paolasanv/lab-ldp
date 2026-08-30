@@ -97,13 +97,14 @@ $$
 
 donde `sust e x s` reemplaza las apariciones **libres** de (x) por (s) dentro de (e).
 
-La sustitución debe respetar el alcance de las variables y realizar un **renombramiento de ligadores** cuando sea necesario para evitar la captura de variables. Utiliza las reglas establecidas en la **octava nota de clase**.
+Esta función representa una secuencia dependiente de sustituciones y será utilizada al definir la semántica de paso grande para `let*`.
 
-Esta función representa una secuencia dependiente de sustituciones y será utilizada como auxiliar para definir la semántica de paso grande de `let*`.
+Considera que la sustitución debe respetar el alcance de las variables y realizar un **renombramiento de ligadores** cuando sea necesario para evitar la captura de variables. Utiliza las reglas establecidas en la **octava nota de clase** para definir esta función.
+
 
 > **⚠️ OBSERVACIÓN IMPORTANTE**
 >
->Las reglas de sustitución para `let` y `let*` son similares; la diferencia principal se encuentra en el alcance que debe renombrarse cuando **existe riesgo de captura**.
+>Aunque las reglas de sustitución para `let` y `let*` son similares; la diferencia principal se encuentra en el alcance que debe renombrarse cuando **existe riesgo de captura**.
 >
 >Considera lo siguiente:
 >
@@ -116,7 +117,7 @@ Esta función representa una secuencia dependiente de sustituciones y será util
 
 ### `sustMany :: ASA -> [Binding] -> ASA`
 
-Define la sustitución simultánea. Esta función será necesaria para implementar la evaluación de `let`.
+Define la **sustitución simultánea**. Esta función será necesaria para implementar la semántica de paso grande para `let`.
 
 La sustitución simultánea se puede representar como:
 
@@ -124,39 +125,47 @@ $$
 e[x_1 := e_1,\ldots,x_n := e_n].
 $$
 
-Por ejemplo, cuando tenemos `let` anidados, un *binding* del `let` exterior puede afectar las expresiones de los *bindings* del `let` interior:
+donde **todas las sustituciones se realizan sobre la expresión original**. 
 
-```text
-(let ((x 6))
-  (let ((y (+ x 5)))
-    y))
-```
-
-En este caso, la sustitución
+Por ejemplo, si tenemos:
 
 $$
-[x := 6]
+(+\ x\ y)[x := 4, y := x]
 $$
 
-debe aplicarse también al *binding* de `y`, por lo que la sustitución aplicada resulta en:
+la sustitución simultánea debe producir:
+
+$$
+(+\ 4\ x)
+$$
+
+Observa que, si `e` es un identificador, `sustMany` debe buscar dicho identificador en la lista de sustituciones. Si encuentra una ligadura correspondiente, debe reemplazar el identificador por el valor asociado; si no encuentra ninguna, debe conservar el identificador sin modificaciones.
+
+Al procesar expresiones de tipo `let` o `let*`, se debe respetar el alcance de las variables para evitar sustituir variables ligadas localmente. Es decir, una sustitución **no debe entrar al cuerpo de una expresión cuando el identificador que intenta sustituir está ligado dentro de ese cuerpo**.
+
+Por ejemplo, si tenemos:
 
 ```haskell
-(let ((x 6))
-  (let ((y (+ 6 5)))
-    y))
+sustMany (let ((x x) (y x)) (+ x y) [x:=10, y:=0]
 ```
 
-En cambio, considera:
+las sustituciones $[x:=10, y:=0]$ no deben modificar las apariciones de $x$ ni $y$ dentro de $(+\ x\ y)$, pues ambas son variables ligadas. Sin embargo, nota que la sustitución sí debe realizarse dentro de la lista de ligadores.
+
+Es decir, el resultado de `sustMany` para el ejemplo anterior es el siguiente
 
 ```haskell
-(let ((x 6)
-      (y (+ x 5)))
-  y)
+=> sustMany (let ((x x) (y x)) (+ x y)) [x:=10, y:=0]
+=> (let ((x 10) (y 10)) (+ x y))
 ```
 
-En este caso, la expresión debe producir un error, ya que los *bindings* de `let` se evalúan de manera simultánea. Por lo tanto, `x` no está disponible para evaluar la expresión asociada a `y`.
+Al recorrer un `let` o `let*`, las **sustituciones asociados a los identificadores ligados** deben **excluirse** al procesar el cuerpo de la expresión.
 
-Observa que esta distinción aplica a `let` y **no a `let*`**, ya que en `let*` cada *binding* puede utilizar las variables ligadas por los *bindings* anteriores.
+Considera este otro ejemplo:
+
+```haskell
+=> sustMany (let* ((x x) (y x)) (+ x y z)) [x:=10, y:=0, z:= 5]
+=> (let* ((x 10) (y 10)) (+ x y 5 ))
+```
 
 
 > **Extra:** Si tienes dudas sobre el resultado de evaluar una expresión `let` o `let*`, puedes utilizar como referencia el [compilador en línea de Racket](https://onecompiler.com/racket) para ejecutar las expresiones y verificar su resultado.
