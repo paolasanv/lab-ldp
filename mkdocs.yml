@@ -26,11 +26,11 @@ nav:
     - Análisis léxico y sintáctico: lab02/intro.md
     - Retos de la semana: lab02/retos.md 
     - Ejecución de pruebas: lab02/pruebas.md
-#  - Práctica 03:
-#    - Integración de la semántica: lab03/intro.md
-#    - Retos de la semana: lab03/retos.md 
-#    - Intérprete de MiniLisp++: lab03/minilisp.md
-#    - Ejecución de pruebas: lab03/pruebas.md
+  - Práctica 03:
+    - Integración de la semántica: lab03/intro.md
+    - Retos de la semana: lab03/retos.md
+    - Intérprete de MiniLisp++: lab03/minilisp.md
+    - Ejecución de pruebas: lab03/pruebas.md
 #  - Práctica 04:
 #    - Evaluación funcional: lab04/intro.md
 #    - Retos de la semana: lab04/retos.md 
