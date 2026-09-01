@@ -1,6 +1,6 @@
 # Tests
 
-Para ejecutar las pruebas de la pŕactica, primero genera el analizador léxico y el analizador sintáctico:
+Para ejecutar las pruebas de la práctica, primero genera el analizador léxico y el analizador sintáctico:
 
 ```bash
 alex Lexer.x
