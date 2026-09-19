@@ -31,11 +31,11 @@ nav:
     - Retos de la semana: lab03/retos.md
     - Intérprete de MiniLisp++: lab03/minilisp.md
     - Ejecución de pruebas: lab03/pruebas.md
-#  - Práctica 04:
-#    - Evaluación funcional: lab04/intro.md
-#    - Retos de la semana: lab04/retos.md 
-#    - Intérprete de MiniLisp++: lab04/minilisp.md
-#    - Ejecución de pruebas: lab04/pruebas.md
+  - Práctica 04:
+    - Alcance estático: lab04/intro.md
+    - Retos de la semana: lab04/retos.md 
+    - Intérprete de MiniLisp++: lab04/minilisp.md
+    - Ejecución de pruebas: lab04/pruebas.md
 #  - Práctica 05:
 #    - Estrategias de evaluación y recursión: lab05/intro.md
 #    - Retos de la semana: lab05/retos.md 

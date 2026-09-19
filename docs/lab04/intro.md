@@ -2,7 +2,7 @@
 
 Para continuar con la implementación del intérprete de MiniLisp, en esta práctica se incorporará el soporte para **funciones y aplicaciones de función**, con el objetivo de modelar las principales características de la *evaluación funcional* del lenguaje.
 
-En esta versión se trabajará con un subconjunto más reducido de MiniLisp, en el que se incorpora la **eliminación del azúcar sintáctico** de las expresiones `let`. Este proceso de eliminación permitirá transformar dichas construcciones a una forma más básica del lenguaje antes de llevar a cabo su evaluación.
+En esta versión se trabajará con un subconjunto más reducido de MiniLisp, en el que se incorpora la **eliminación del azúcar sintáctico** de las expresiones `let` y `let*`. Este proceso de eliminación permitirá transformar dichas construcciones a una forma más básica del lenguaje antes de llevar a cabo su evaluación.
 
 Además, la incorporación de funciones y, particularmente, de la currificación requiere realizar una transformación adicional sobre el Árbol de Sintaxis Abstracta. El árbol producido por el análisis sintáctico deberá convertirse en una estructura binaria que facilite la representación de las aplicaciones de función y su posterior evaluación.
 

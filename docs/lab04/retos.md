@@ -1,103 +1,125 @@
-# Laboratorio 04: Alcance estático mediante cerraduras
+# Laboratorio 04: Desazucarado y cerraduras
 
-## Reto 1 — Reconocer lambda
-### Lexer.x
+## Reto 1 — Azúcar sintáctica
 
-Añade `lambda` como **palabra reservada** del lenguaje. Asegúrate de que el analizador léxico la reconozca como una palabra reservada y no como un identificador.
+### Interp.hs
 
----
-
-## Reto 2 — Construir el ASA fuente
-### Grammars.y
-
-Añade las reglas de producción correspondientes a las **abstracciones de función** y a las **aplicaciones de función**.
-
-Considera las siguientes restricciones:
-
-* Los parámetros de una función deben contener **al menos una variable**.
-* Los argumentos de una aplicación de función deben contener **al menos una expresión**.
-
----
-
-## Reto 3 — Currificar y desazucarar 
-### Desugar.hs
-
-Implementa la **currificación** de funciones y aplicaciones de función, de manera que el ASA resultante utilice únicamente funciones **uniparamétricas**.
+Implementa el **desazucarado** de funciones, aplicaciones de función, ligaduras y operaciones multiparamétricas, de manera que el ASA resultante utilice únicamente los constructores del lenguaje **sin azúcar sintáctica**.
 
 ### `curryFun :: [Nombre] -> ASA -> Maybe ASA`
 
-Currifica una función con múltiples parámetros convirtiéndola en una secuencia de funciones con un único parámetro.
+Implementa la **currificación de funciones**. Una función con múltiples parámetros debe transformarse en una secuencia de funciones anidadas, donde cada función recibe un único parámetro.
 
-Por ejemplo:
+Por ejemplo, la expresión:
 
-```lisp
+```text
 (lambda (x y z) (+ x y z))
 ```
 
 debe convertirse en:
 
-```lisp
+```text
 (lambda (x)
   (lambda (y)
     (lambda (z)
       (+ x y z))))
 ```
 
-
 ### `curryApp :: ASA -> [ASA] -> Maybe ASA`
 
-Currifica una aplicación de función con múltiples argumentos, convirtiéndola en una secuencia de aplicaciones uniparamétricas.
+Implementa la **currificación de aplicaciones de función**. Una aplicación con múltiples argumentos debe transformarse en una secuencia de aplicaciones, de manera que cada aplicación suministre un único argumento.
 
 Por ejemplo:
 
-```lisp
-((lambda (x) (and x y)) (not #t #f) #f)
+```text
+((lambda (x) (and x y)) (not #t) #f)
 ```
 
 debe convertirse en:
 
-```lisp
-(((lambda (x) (and x y)) (not #t #f)) #f)
+```text
+(((lambda (x) (and x y)) (not #t)) #f)
+```
+
+Observa que la función se aplica primero al argumento `(not #t)` y, posteriormente, al argumento `#f`.
+
+### `binaryOp :: (ASA -> ASA -> ASA) -> [ASA] -> Maybe ASA`
+
+Implementa la transformación de operaciones con múltiples operandos en una secuencia de **operaciones binarias asociadas por la izquierda**.
+
+Las operaciones deben considerarse estrictamente binarias después del desazucarado. Si una operación recibe menos de dos argumentos debe producir `Nothing`.
+
+Por ejemplo:
+
+```text
+(+ 1 2 3 4)
+```
+
+debe convertirse en:
+
+```text
+(((+ 1 2) 3) 4)
 ```
 
 
 ### `desugar :: SASA -> Maybe ASA`
 
-Implementa el proceso de **desazucarado** del lenguaje.
+Implementa el proceso de **desazucarado** para cada constructor del lenguaje.
 
-Esta función debe:
+La función debe:
 
-1. Currificar las funciones y aplicaciones de función.
-2. Eliminar el azúcar sintáctica de `let`, transformando cada expresión `let` en una aplicación de función equivalente.
-3. Producir como resultado un `ASA` que utilice únicamente los constructores correspondientes al lenguaje sin azúcar.
+1. Currificar las funciones con múltiples parámetros.
+2. Currificar las aplicaciones de función con múltiples argumentos.
+3. Eliminar el azúcar sintáctica de `let` y `let*`, transformando cada ligadura en una aplicación de función equivalente.
+4. Transformar las operaciones aritméticas multiparamétricas en operaciones binarias anidadas.
+5. Propagar el fallo (`Nothing`) cuando alguna de las transformaciones no sea válida.
+6. Producir como resultado un `ASA` que utilice únicamente los constructores correspondientes al lenguaje **sin azúcar**.
 
-Por ejemplo, una expresión como:
+Por ejemplo, la expresión:
 
-```lisp
-(let ((x 5))
-  (+ x 1))
+```text
+(let ((x 4))
+  (+ x 5))
 ```
 
-debe transformarse en:
+debe convertirse en una aplicación de función equivalente:
 
-```lisp
-((lambda (x) (+ x 1)) 5)
+```text
+((lambda (x) (+ x 5)) 4)
 ```
+
+Para `let*`, las ligaduras deben conservar su evaluación **secuencial**. Por ejemplo:
+
+```text
+(let* ((x 4)
+       (y (+ x 5)))
+  (- y 2))
+```
+
+puede transformarse mediante aplicaciones de funciones anidadas:
+
+```text
+((lambda (x)
+   ((lambda (y)
+      (- y 2))
+    (+ x 5)))
+ 4)
+```
+
+Observa que la expresión que calcula `y` puede utilizar `x`.
+
+> **Hint:** ¿Es necesario transformar directamente `let*` en aplicaciones de función? 
+
 
 ---
 
-## Reto 4 — Evaluar con cerraduras
-### Interp.hs
+## Reto 2 — Alcance estático y cerraduras
 
-Define la **semántica operacional de MiniLisp++ mediante cerraduras**, utilizando las reglas de evaluación definidas en el documento de la práctica.
+### Interp.hs & MiniLispPlusPlus.hs
 
-### `freeVars :: ASA -> [Nombre]`
+Define la **semántica operacional de MiniLisp++ mediante cerraduras**.
 
-Obtén el conjunto de variables libres que aparecen dentro de una expresión.
-
-La implementación debe respetar el alcance de las variables establecida en la **décima nota de clase**.
-
-### `lookupEnv :: Nombre -> [(Nombre, a)] -> Maybe a`
+### `lookupEnv :: Nombre -> Env -> Maybe Value`
 
 Implementa la búsqueda de un identificador dentro del ambiente.
 
@@ -113,24 +135,23 @@ la búsqueda de `x` debe devolver el valor correspondiente a su asignación más
 
 ### `bigStep :: Env -> ASA -> Maybe Value`
 
-Define la semántica operacional de **paso grande** para `MiniLisp++`, siguiendo la estrategia utilizada en las prácticas anteriores.
+Define la **semántica operacional de paso grande** para `MiniLisp++`, siguiendo una estrategia de **evaluación ansiosa**.
 
-Para la evaluación de funciones y aplicaciones de función, utiliza las reglas de evaluación mediante **cerraduras** definidas en el documento de esta práctica.
+La evaluación debe realizarse de acuerdo con las reglas semánticas definidas para el lenguaje. En particular, las expresiones que aparecen como argumentos de una aplicación deben evaluarse antes de realizar la aplicación de la función.
 
-En particular, una cerradura debe conservar la función junto con el ambiente correspondiente a su **definición**, de manera que se respete el **alcance estático** del lenguaje.
+Para la evaluación de funciones y aplicaciones de función, utiliza **cerraduras**.
 
----
+Una cerradura debe conservar:
 
-## Reto 5 — Integrar MiniLisp++ 
-### MiniLispPlusPlus.hs
+* la función que se está evaluando; y
+* el ambiente correspondiente al lugar donde dicha función fue definida.
 
-Completa la función:
+De esta manera, las cerraduras permiten implementar el **alcance estático** del lenguaje.
 
-```haskell
-evalua :: String -> Maybe Value
-```
 
-Esta función debe realizar todo el proceso de evaluación de un programa, desde el **análisis léxico** hasta la **evaluación**.
+### `evalua :: String -> Maybe Value`
+
+Dentro de `MiniLispPlusPlus.hs`, implementa una función que realice el **proceso completo de evaluación de un programa**, desde el análisis léxico hasta la obtención del resultado final.
 
 El proceso debe seguir las siguientes etapas:
 

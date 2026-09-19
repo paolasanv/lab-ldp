@@ -43,7 +43,6 @@ _Requisito previo:_  comprensión de los contenidos abordados en la **sexta** y 
 
 ---
 
-<!---
 ## Práctica 04: Alcance estático mediante cerraduras
 
 Trabajarás con una versión reducida de **MiniLisp++** para incorporar **funciones y aplicaciones de funciones**, integrándolas con el flujo de trabajo desarrollado en las prácticas anteriores.
@@ -54,6 +53,7 @@ _Requisito previo:_  comprensión de los contenidos abordados en la **décima**,
 
 ---
 
+<!---
 ## Práctica 05: Extensión de MiniLisp++
 
 Extenderas el lenguaje **MiniLisp++** mediante la incorporación de nuevas construcciones: `if`, `if0`, `cond` y `letrec`. Además, se implementará su evaluación mediante diferentes estrategias de evaluación, específicamente **evaluación ansiosa** y **evaluación diferida**.
