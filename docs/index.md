@@ -61,6 +61,8 @@ Extenderas el lenguaje **MiniLisp++** mediante la incorporación de nuevas const
 La práctica abarcará las distintas etapas del intérprete: análisis léxico, análisis sintáctico, eliminación de azúcar sintáctica, evaluación y manejo de recursión.
 
 _Requisito previo:_  comprensión de los contenidos abordados en la **decimotercera** y  **decimocuarta** notas de clase. 
+
+
 --- 
 
 <!---
