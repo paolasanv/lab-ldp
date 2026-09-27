@@ -4,7 +4,7 @@
 
 ### Lexer.x
 
-Modifica el analizador léxico para reconocer `if0`, `if`, `cond`, `else` y `letrec` como **palabras reservadas** del lenguaje, en lugar de tratarlas como identificadores.
+Modifica el analizador léxico para reconocer `if`, `cond`, `else` y `letrec` como **palabras reservadas** del lenguaje, en lugar de tratarlas como identificadores.
 
 ---
 
@@ -31,35 +31,42 @@ También es válida una expresión como:
       (else (- 1 2)))
 ```
 
+La alternativa `else` representa el caso que debe evaluarse cuando ninguna de las condiciones anteriores resulta verdadera.
+
 ---
 
 ## Reto 3 — Currificar y desazucarar
 
-### Interp.hs
+### `Interp.hs`
 
-Recupera las siguientes definiciones desarrolladas en la práctica anterior:
+Debes transformar la sintaxis superficial de MiniLisp++ en una representación correspondiente al **lenguaje núcleo**.
+
+Para ello, primero recupera de la práctica anterior las siguientes funciones:
 
 ```haskell
 curryFun :: [Nombre] -> ASA -> Maybe ASA
 curryApp :: ASA -> [ASA] -> Maybe ASA
+binaryOp :: (ASA -> ASA -> ASA) -> [ASA] -> Maybe ASA
 ```
 
-Posteriormente, completa la función:
+### 3.1 Eliminación del azúcar sintáctico de `cond`
+
+Define por separado:
 
 ```haskell
-desugar :: SASA -> Maybe ASA
+desugarCond :: [(SASA, SASA)] -> SASA -> Maybe ASA
 ```
 
-incorporando la eliminación del azúcar sintáctico correspondiente a las nuevas construcciones, cuando sea necesario.
+La función debe transformar una expresión `cond` en una secuencia de expresiones `if` anidadas.
 
-Observa que una expresión `cond` puede transformarse en una expresión equivalente utilizando `if`. Por ejemplo:
+Por ejemplo:
 
 ```lisp
-(cond ((and #t #f) (+ 1 2)) 
+(cond ((and #t #f) (+ 1 2))
       (else (- 1 2)))
 ```
 
-es equivalente a:
+debe convertirse en:
 
 ```lisp
 (if (and #t #f)
@@ -67,151 +74,234 @@ es equivalente a:
     (- 1 2))
 ```
 
-**Hint:** Decide en qué momento del proceso de desazucaramiento resulta más conveniente realizar la transformación de `cond`.
+Si existen varias condiciones, cada una debe convertirse en un `if` anidado. Por ejemplo:
+
+```lisp
+(cond (c1 e1)
+      (c2 e2)
+      (else e3))
+```
+
+debe convertirse en:
+
+```lisp
+(if c1 e1
+    (if c2 e2
+        e3))
+```
+
+> **Hint:** Presta atención a la firma de la función `desugarCond`.
+> ¿Cuál debería ser el papel de `desugar` dentro de `desugarCond`?
+
+### 3.2 Completar `desugar`
+
+Completa:
+
+```haskell
+desugar :: SASA -> Maybe ASA
+```
+
+para eliminar toda la sintaxis superficial que no pertenece al lenguaje núcleo.
+
+> **Hint:** Revisa tu solución a `desugar` del laboratorio anterior. 
+> ¿Qué tienen en común?
+
+### 3.3 Caso especial: `letrec`
+
+`letrec` requiere un tratamiento especial porque permite definir funciones recursivas.
+
+Si en el lenguaje fuente tenemos:
+
+```lisp
+(letrec f e c)
+```
+
+queremos expresar `letrec` internamente como:
+
+```lisp
+(let (f (Y (lambda (f) e)))
+     c)
+```
+
+para que **el desugar se realice sobre la versión definida con `let`** y no directamente sobre `letrec`.
+
+**Nota:** En este reto `Y` solamente debe tratarse como un identificador. 
 
 ---
 
-## Reto 4 — Estrategia de evaluación
 
-### Interp.hs
+## Reto 4 — Evaluación diferida
 
-Recupera la definición de `lookupEnv` desarrollada en la práctica anterior:
+### `Interp.hs`
 
-```haskell
-lookupEnv :: Nombre -> [(Nombre, a)] -> Maybe a
-```
+En este reto se debe implementar la **evaluación diferida con alcance estático**.
 
-y revisa si es necesario modificarla para trabajar con el nuevo tipo:
+A diferencia de una evaluación ansiosa, una expresión no tiene que evaluarse inmediatamente cuando aparece como argumento de una función. En su lugar, puede conservarse junto con el ambiente en el que fue creada y evaluarse hasta que su valor sea necesario.
 
-```haskell
-lookupEnv :: Nombre -> Env -> Maybe Binding
-```
-
-También puedes recuperar la definición de la **semántica de paso grande con alcance estático** desarrollada en la práctica anterior. Sin embargo, deberás realizar los cambios necesarios para que sea compatible con la siguiente firma:
+Para representar esta situación, `Value` incluye:
 
 ```haskell
-bigStep :: Estrategia -> Env -> ASA -> Maybe Value
+ExprV ASA Env
 ```
 
-Observa que ahora la función recibe un nuevo argumento: `Estrategia`.
+el cuál representa una cerradura de expresión. 
 
-En esta práctica implementarás la semántica de paso grande utilizando dos estrategias de evaluación:
+### 4.1 Recuperar `lookupEnv`
 
-* **Evaluación ansiosa:** los argumentos de una función se evalúan antes de realizar la aplicación.
-* **Evaluación glotona o diferida:** los argumentos se almacenan sin evaluar y únicamente se evalúan cuando su valor es necesario.
-
-Para implementar la evaluación diferida, utiliza la función:
+Recupera de la práctica anterior:
 
 ```haskell
-force :: Estrategia -> Binding -> Maybe Value
+lookupEnv :: Nombre -> Env -> Maybe Value
 ```
 
-Esta función deberá obtener el valor asociado a un `Binding` de acuerdo con la estrategia de evaluación utilizada.
+Esta función únicamente busca el valor asociado a un identificador dentro del ambiente.
 
-### Evaluación ansiosa
+Por ejemplo, si el ambiente contiene:
 
-Considera la siguiente aplicación:
-
-```lisp
-(lambda (x) (+ x x)) (+ 3 4)
+```haskell
+("x", ExprV e env)
 ```
 
-Bajo evaluación ansiosa, el argumento `(+ 3 4)` se evalúa antes de realizar la aplicación. Por lo tanto, el ambiente almacena directamente el valor de `x`:
+`lookupEnv` debe devolver:
 
-```text
-(lambda (x) (+ x x)) (+ 3 4)
-→ (lambda (x) (+ x x)) 7
-→ (+ x x)
+```haskell
+Just (ExprV e env)
 ```
 
-En el ambiente, `x` queda asociado con el valor `7`:
+y **no debe evaluar `e`**.
 
-```text
-[x ↦ 7]
+
+### 4.2 Puntos estrictos
+
+En una evaluación diferida, no todas las expresiones necesitan evaluarse inmediatamente.
+
+Existen determinados lugares llamados **puntos estrictos**, en los que sí es necesario obtener el valor de una expresión para poder continuar la evaluación.
+
+En MiniLisp++, los puntos estrictos aparecen en:
+
+* los operandos de las operaciones aritméticas;
+* los operandos de las operaciones booleanas;
+* la condición de `if`;
+* la posición de función de una aplicación.
+
+### 4.3 Definir `strict`
+
+Define:
+
+```haskell
+strict :: Value -> Maybe Value
 ```
 
-### Evaluación glotona o diferida
+Su objetivo es **forzar la evaluación de un valor cuando sea necesario**.
 
-Bajo evaluación glotona, el argumento no se evalúa inmediatamente. En su lugar, se almacena la expresión en el ambiente:
+Recueda que existen dos situaciones principales.
 
-```lisp
-(lambda (x) (+ x x)) (+ 3 4)
+### 1. Valor ya evaluado
+
+Si `strict` recibe un valor como:
+
+```haskell
+NumV n
+BooleanV b
+ClosureV x e env
 ```
 
-La aplicación produce un ambiente donde `x` queda asociado con la expresión original:
+no hay nada más que evaluar y debe devolver ese mismo valor.
 
-```text
-[x ↦ (+ 3 4)]
+
+### 2. Expresión suspendida
+
+Si `strict` recibe:
+
+```haskell
+ExprV e env
 ```
 
-Por lo tanto, la expresión puede continuar su evaluación hasta que sea necesario obtener el valor de `x`:
+significa que `e` todavía no ha sido evaluada.
 
-```text
-(+ x x)
-→ (+ 7 7)
-→ 14
+En este caso, `strict` debe:
+
+1. evaluar `e` utilizando el ambiente `env`;
+2. verificar el resultado;
+3. si el resultado sigue siendo una `ExprV`, continuar forzándolo;
+4. si se obtiene un valor, devolverlo;
+5. si la evaluación queda bloqueada y produce `Nothing`, devolver `Nothing`.
+
+### 4.4 Implementar `bigStep`
+
+Una vez definida `strict`, completa:
+
+```haskell
+bigStep :: Env -> ASA -> Maybe Value
 ```
 
-En ambos casos, cuando se recupera una variable del ambiente, `force` debe garantizar que se obtenga finalmente un `Value`.
+para implementar la **semántica de paso grande con alcance estático y evaluación diferida**.
 
-> **Hint:** Ten cuidado al definir la evaluación para cada estrategia. Primero identifica cuáles son las expresiones que poseen **puntos estrictos**, es decir, aquellas cuyos subcomponentes deben evaluarse para poder obtener un resultado.
-
-Después, analiza si existen otros constructores que puedan evaluarse de la misma manera.
-
-Además, no deberás implementar directamente la evaluación del caso `LetRec` dentro de `bigStep`. Para este caso utiliza la función `evaluaLetRec`, aunque todavía no esté implementada. A partir de su firma, identifica qué información debe recibir y cómo debe utilizarla.
+Debes utilizar como referencia las reglas semánticas establecidas en la décimotercera nota de clase. 
 
 ---
 
 ## Reto 5 — Recursión
 
-### Interp.hs
+### `MiniLispPlusPlus.hs`
 
-A partir de los mecanismos de recursión estudiados en clase, determina cuál resulta más conveniente para implementar `letrec` considerando las estrategias de evaluación de esta práctica.
+En el Reto 3, `letrec` se transformó utilizando el identificador `Y`. En este reto se debe completar esa parte del lenguaje definiendo el **combinador de punto fijo `Y`**.
 
-Puedes utilizar alguno de los siguientes mecanismos:
-
-* **Ambiente recursivo**
-* **Combinador de punto fijo Y**
-* **Combinador de punto fijo Z**
-
-Selecciona el mecanismo que consideres más adecuado y justifica tu decisión durante la defensa de la práctica.
+### 5.1 Definir `combinadorY`
 
 Define:
 
 ```haskell
-mecanismoRecursion :: MecanismoRecursion
-mecanismoRecursion = <tu decisión>
+combinadorY :: ASA
 ```
 
-Posteriormente, implementa:
+utilizando únicamente los constructores:
 
 ```haskell
-evaluaLetRec :: Estrategia -> Nombre -> ASA -> ASA -> Env -> Maybe Value
+Fun
+App
+Id
 ```
 
-Esta función deberá utilizar el mecanismo de recursión seleccionado para realizar la evaluación de `LetRec` de acuerdo con la estrategia de evaluación utilizada.
+El combinador debe representar:
 
----
+```text
+Y = λf. (λx. f (x x)) (λx. f (x x))
+```
 
-## Reto 6 — Integrar MiniLisp++
+### 5.2 Definir `prelude`
 
-### MiniLispPlusPlus.hs
-
-Finalmente, integra todas las etapas desarrolladas durante la práctica en el intérprete de MiniLisp++.
-
-Implementa el flujo completo, desde el análisis léxico hasta la evaluación de la expresión, mediante la función:
+Define:
 
 ```haskell
-evalua :: Estrategia -> String -> Maybe Value
+prelude :: Env
 ```
 
-La función deberá recibir una estrategia de evaluación y un programa escrito en MiniLisp++, y deberá ejecutar las etapas correspondientes:
+El `prelude` debe contener el identificador `Y` asociado con el valor resultante de evaluar `combinadorY` una vez en el ambiente vacío.
+
+### 5.3 Completar `evalua`
+
+Finalmente, define:
+
+```haskell
+evalua :: String -> Maybe Value
+```
+
+para integrar todas las etapas del intérprete.
+
+La evaluación debe comenzar utilizando `prelude` como ambiente inicial y **no el ambiente vacío**, ya que `Y` debe estar disponible para las expresiones que utilizan `letrec`.
+
+Si la evaluación tiene éxito no olvides aplicar `strict` a este resultado.
 
 ```text
 Código fuente 
      -> Análisis léxico  
           -> Análisis sintáctico  
                -> Desazucaramiento 
-                    -> Evaluación 
-                         -> Resultado
+                    -> Evaluación con ambiente adecuado
+                         -> Resultado con strict
 ```
+
+# Restricción de implementación
+
+Recuerda que la solución debe desarrollarse **sin utilizar las estructuras `do` ni `case ... of`**. El uso de cualquiera de ellas tendrá una **penalización**.

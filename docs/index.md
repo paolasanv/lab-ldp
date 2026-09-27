@@ -53,16 +53,17 @@ _Requisito previo:_  comprensión de los contenidos abordados en la **décima**,
 
 ---
 
-<!---
+
 ## Práctica 05: Extensión de MiniLisp++
 
-Extenderas el lenguaje **MiniLisp++** mediante la incorporación de nuevas construcciones: `if`, `if0`, `cond` y `letrec`. Además, se implementará su evaluación mediante diferentes estrategias de evaluación, específicamente **evaluación ansiosa** y **evaluación diferida**.
+Extenderas el lenguaje **MiniLisp++** mediante la incorporación de nuevas construcciones: `if`, `cond` y `letrec`. Además, se elegirá la **evaluación diferida** como estrategia de evaluación.
 
 La práctica abarcará las distintas etapas del intérprete: análisis léxico, análisis sintáctico, eliminación de azúcar sintáctica, evaluación y manejo de recursión.
 
 _Requisito previo:_  comprensión de los contenidos abordados en la **decimotercera** y  **decimocuarta** notas de clase. 
 --- 
 
+<!---
 ## Práctica 06: CPS y recursión de cola
 
 Definirás funciones utilizando el estilo de paso de continuaciones (*CPS*), representando explícitamente mediante continuaciones las operaciones que deben realizarse después de cada llamada recursiva.
