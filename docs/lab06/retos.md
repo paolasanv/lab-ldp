@@ -11,69 +11,53 @@ En cada reto, antes de escribir código, identifica:
 
 ---
 
-## Reto 1 — Factorial
+## Reto 1 — Potencia
 
-Observa la definición con llamadas recursivas para factorial:
+Observa la definición con llamadas recursivas para calcular $n^m$:
 
 ```haskell
-factorial :: Integer -> Integer
-factorial 0 = 1
-factorial n = n * factorial (n - 1)
+potencia :: Int -> Int -> Int
+potencia _ 0 = 1
+potencia n m = n * potencia n (m - 1)
 ```
 
-Y la versión con recursión de cola:
+Y la solución _parcial_ con recursión de cola:
 
 ```haskell
-factorialRC :: Integer -> Integer -> Integer
-factorialRC 0 acc = acc
-factorialRC n acc = factorialRC (n - 1) (n * acc)
+potenciaCola :: Int -> Int -> Int
+potenciaCola n m = potenciaCola' n m 1  
+  where
+    potenciaCola' :: Int -> Int -> Int -> Int 
+    potenciaCola' _ 0 acc = ? 
+    potenciaCola' n m acc = ? 
 ```
 
-Da la versión con CPS para factorial
+Da la versión con CPS para la potencia
 
 ```haskell
-factorialCPS :: Integer -> (Integer -> r) -> r
+potenciaCPS :: Int -> Int -> (Int -> r) -> r
+potenciaCPS n 0 k = k ? 
+potenciaCPS n m k = ?
 ```
 
 **Tip:** En el caso base, ¿qué resultado debe recibir la continuación?
 
 --- 
 
-## Reto 2 — Suma
+## Reto 2 — Longitud
 
-Observa la definición con llamadas recursivas para suma:
-
-```haskell
-suma :: [Integer] -> Integer
-suma [] = 0
-suma (x:xs) = x + suma xs
-```
-
-Y la versión con recursión de cola:
-
-```haskell
-sumaRC :: [Integer] -> Integer -> Integer
-sumaRC [] acc = acc
-sumaRC (x:xs) acc = sumaRC xs (x + acc)
-```
-
-Da la versión con CPS para suma:
-
-```haskell
-sumaCPS :: [Integer] -> (Integer -> r) -> r
-```
-
-**Tip:** ¿Qué representa `(Integer -> r)`? 
-
----
-## Reto 3 — Longitud
-
-Observa la definición con llamadas recursivas para longitud:
+Observa la definición con llamadas recursivas para obtener el tamaño de una lista:
 
 ```haskell
 longitud :: [a] -> Int
 longitud [] = 0
-longitud (_:xs) = 1 + longitud xs
+longitud (_ : xs) = 1 + longitud xs
+```
+
+Y la firma para su versión con recursión de cola:
+
+```haskell
+longitudCola :: [a] -> Int
 ```
 
 Da la versión con CPS para longitud:
@@ -82,67 +66,91 @@ Da la versión con CPS para longitud:
 longitudCPS :: [a] -> (Int -> r) -> r
 ```
 
-**Tip:** Define primero una versión con recursión de cola. ¿Qué tiene en común con los retos anteriores?
+**Tip 1:** Observa si la **firma** de `longitudCola` cumple con **uno de los requisitos** necesarios para implementar recursión de cola.
+
+**Tip 2:** Para este caso, pasar de la versión con recursión de cola a CPS sólo requiere modificar qué se devuelve como resultado, más no el cómo. 
+
+---
+## Reto 3 — Reversa
+
+Observa la definición con llamadas recursivas para reversa:
+
+```haskell
+reversa :: [a] -> [a]
+reversa [] = []
+reversa (x : xs) = reversa xs ++ [x]
+```
+
+Es necesario que definas la versión con recursión de cola 
+
+```haskell
+reversaCola :: [a] -> [a]
+```
+
+antes de dar la versión con CPS.
+
+```haskell
+reversaCPS :: [a] -> ([a] -> r) -> r
+```
+
+**Tip:** Los operadores *:* y *++* **no necesariamente** van a poderse utilizar de la misma manera entre la versión de cola y la versión CPS. Reflexiona sobre la diferencia de objetivos que existen entre un acumulador y una continuación.
 
 ---
 
-## Reto 4 — *map*
+## Reto 4 — Concatena
 
-Observa la definición con llamadas recursivas para `mapDirecto`:
-
-```haskell
-mapDirecto :: (a -> b) -> [a] -> [b]
-mapDirecto _ [] = []
-mapDirecto f (x:xs) = f x : mapDirecto f xs
-```
-
-Da la versión con CPS para `mapDirecto`:
+Observa la definición con llamadas recursivas para concatenar los elementos de una lista de listas:
 
 ```haskell
-mapCPS :: (a -> b) -> [a] -> ([b] -> r) -> r
+concatena :: [[a]] -> [a]
+concatena [] = []
+concatena (xs : xss) = xs ++ concatena xss
 ```
 
-**Tip:** ¿Cómo puedes hacer que la continuación agregue `f x` al resultado obtenido?
+La definición con recursión de cola 
+
+```haskell
+concatenaCola :: [[a]] -> [a]
+```
+y la versión CPS
+
+```haskell
+concatenaCPS :: [[a]] -> ([a] -> r) -> r
+concatenaCPS [] k = ?
+concatenaCPS (x:xs) k = ?
+```
+
+requieren el uso del operador **++**, ten cuidado cómo lo usas cuando tengas que pasar *cierto* argumento a una continuación. 
+
+Recuerda que, en general, no es lo mismo *x ++ v* que *v ++ x*. 
 
 ---
 
-## Reto 5 — *filter*
+## Reto 5 — Intercala
 
-Observa la definición con llamadas recursivas para `filtra`:
-
-```haskell
-filtra :: (a -> Bool) -> [a] -> [a]
-filtra _ [] = []
-filtra p (x:xs)
-  | p x       = x : filtra p xs
-  | otherwise = filtra p xs
-```
-
-Da la versión con CPS para `filtra`:
+Observa la definición con llamadas recursivas para intercalar los elementos entre dos listas:
 
 ```haskell
-filtraCPS :: (a -> Bool) -> [a] -> ([a] -> r) -> r
+intercala :: [a] -> [a] -> [a]
+intercala [] ys = ys
+intercala xs [] = xs
+intercala (x : xs) (y : ys) = x : y : intercala xs ys
 ```
 
-**Tip:** Usa la solución a `mapCPS` como referencia. Determina qué debe hacer la continuación cuando `p x` es verdadero y cuando es falso.
-
----
-
-## Reto 6 — *sumaArbol*
-
-Observa la definición con llamadas recursivas para `sumaArbol`:
+Para la versión con recursión de cola 
 
 ```haskell
-sumaArbol :: Arbol Integer -> Integer
-sumaArbol Vacio = 0
-sumaArbol (Nodo x izq der) =
-  x + sumaArbol izq + sumaArbol der
+intercalaCola :: [a] -> [a] -> [a]
 ```
 
-Da la versión con CPS para `sumaArbol`:
+analiza si de verdad es suficiente devolver únicamente el acumulador. 
 
+Y para la versión CPS 
 ```haskell
-sumaArbolCPS :: Arbol Integer -> (Integer -> r) -> r
+intercalaCPS :: [a] -> [a] -> ([a] -> r) -> r
+intercalaCPS [] ys k = ?
+intercalaCPS xs [] k = ?
+intercalaCPS (x:xs) (y:ys) k = ?
 ```
 
-**Tip:** Después de obtener la suma del subárbol izquierdo, todavía necesitas procesar el derecho y combinar ambos resultados. ¿Cómo puede una continuación representar ese trabajo pendiente?
+piensa cómo utilizar la cabeza de ambas listas para resolver el intercalamiento a través de la continuación. 
