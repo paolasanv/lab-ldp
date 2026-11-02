@@ -72,4 +72,14 @@ Definirás funciones utilizando el estilo de paso de continuaciones (*CPS*), rep
 
 _Requisito previo:_  comprensión de los contenidos abordados en la **decimosexta** nota de clase. 
 
+---
 
+## Práctica 07: Programación estructurada y control de flujo
+
+Extenderás el lenguaje **TinyC** mediante la incorporación de nuevas construcciones: `if`, `do-while`, `for` y `switch`.    
+
+La práctica abarcará las distintas etapas del intérprete: análisis léxico, análisis sintáctico, eliminación de azúcar sintáctica y evaluación.
+
+_Requisito previo:_  comprensión de los contenidos abordados en la **decimoséptima** y  **decimoctava** notas de clase. 
+
+---
