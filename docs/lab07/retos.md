@@ -121,13 +121,13 @@ Para el caso general, deberás extender esta idea de manera recursiva, transform
 >>
 >>Revisa el siguiente [repositorio](https://github.com/paolasanv/equivalencia-semantica/blob/main/docs/equivalencia-dependiente-de-contexto.pdf) y explica con tus propias palabras:
 >>¿Qué significa que dos programas sean equivalentes bajo semántica de paso grande?
->>Envía un mensaje con tu respuesta a la ayudante de laboratorio.
+>>Envía un correo con tu respuesta a la ayudante de laboratorio.
 
 >>**Participación secreta (adicional)**
 >>
 >>Si utilizaste el asistente de pruebas **Rocq** en tu curso de Lógica Computacional, revisa la demostración de la [equivalencia entre los programas `while b do S end` e `if b then (S; while b do S end) else skip end`](https://github.com/paolasanv/equivalencia-semantica/blob/main/comm/SemanticaOperacional_comm.v).
 >>¿La demostración de esta equivalencia procede por inducción? Explica cómo te diste cuenta. No es necesario que comprendas la demostración por completo.
->>Envía un mensaje con tu respuesta a la ayudante de laboratorio.
+>>Envía un correo con tu respuesta a la ayudante de laboratorio.
 
 ---
 
